@@ -6,7 +6,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface OMDBApi {
+interface OMDBapi {
 
     @GET("/")
     suspend fun getMovie(
