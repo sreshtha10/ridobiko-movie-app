@@ -1,11 +1,18 @@
 package com.sreshtha.ridobiko_movie_app.activity
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.ConnectivityManager.*
+import android.net.NetworkCapabilities.*
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sreshtha.ridobiko_movie_app.MyApp
 import com.sreshtha.ridobiko_movie_app.api.OMDBapi
 import com.sreshtha.ridobiko_movie_app.model.Show
 import com.sreshtha.ridobiko_movie_app.utils.Resource
+import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -62,6 +69,22 @@ class MainViewModel @Inject constructor(private  val api:OMDBapi) :ViewModel(){
                 showData.value = Resource.Error<Show>(message = "Error")
             }
         }
+    }
+
+    fun hasInternetConnection(context: Context):Boolean{
+        val connectivityManager = getApplication(context).getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+
+        val activeNetwork = connectivityManager.activeNetwork?:return false
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork)?:return false
+        return when{
+            capabilities.hasTransport(TRANSPORT_WIFI) -> true
+            capabilities.hasTransport(TRANSPORT_CELLULAR) -> true
+            capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
+            else -> return false
+        }
+
     }
 
 

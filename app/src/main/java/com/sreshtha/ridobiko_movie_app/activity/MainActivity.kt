@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.sreshtha.ridobiko_movie_app.databinding.ActivityMainBinding
 import com.sreshtha.ridobiko_movie_app.model.Show
 import com.sreshtha.ridobiko_movie_app.utils.Resource
@@ -33,8 +34,12 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
 
            tv_btn_search.setOnClickListener {
+               if(!_viewModel.hasInternetConnection(applicationContext)){
+                   Snackbar.make(root,"No Internet Connection!",Snackbar.LENGTH_SHORT).show()
+                   return@setOnClickListener
+               }
                if(searchView.query.toString().isEmpty()){
-                   //todo display snackbar
+                   Snackbar.make(root,"Please Enter a Title!",Snackbar.LENGTH_SHORT).show()
                    return@setOnClickListener
                }
                val title = searchView.query.toString()
