@@ -1,6 +1,5 @@
 package com.sreshtha.ridobiko_movie_app.activity
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,8 +22,14 @@ class MainViewModel @Inject constructor(private  val api:OMDBapi) :ViewModel(){
     fun getMovie(title:String){
         viewModelScope.launch {
             val result = api.getMovie(title)
-            if(result.isSuccessful){
+            if(result.isSuccessful && result.body()?.Response?.lowercase() == "true"){
                 movieData.value = Resource.Success<Show>(result.body())
+            }
+            else if(result.isSuccessful){
+                movieData.value = Resource.Error<Show>(message = "Not Found!")
+            }
+            else{
+                movieData.value = Resource.Error<Show>(message = "Error")
             }
         }
     }
@@ -32,8 +37,14 @@ class MainViewModel @Inject constructor(private  val api:OMDBapi) :ViewModel(){
     fun getSeries(title:String){
         viewModelScope.launch {
             val result = api.getSeries(title)
-            if(result.isSuccessful){
+            if(result.isSuccessful && result.body()?.Response?.lowercase() == "true"){
                 seriesData.value = Resource.Success<Show>(result.body())
+            }
+            else if(result.isSuccessful){
+                seriesData.value = Resource.Error<Show>(message = "Not Found!")
+            }
+            else{
+                seriesData.value = Resource.Error<Show>(message = "Error")
             }
         }
     }
@@ -41,8 +52,14 @@ class MainViewModel @Inject constructor(private  val api:OMDBapi) :ViewModel(){
     fun getShow(title:String){
         viewModelScope.launch {
             val result = api.getShow(title)
-            if(result.isSuccessful){
-                showData.value = Resource.Success<Show>(result.body())
+            if(result.isSuccessful && result.body()?.Response?.lowercase() == "true"){
+               showData.value = Resource.Success<Show>(result.body())
+            }
+            else if(result.isSuccessful){
+                showData.value = Resource.Error<Show>(message = "Not Found!")
+            }
+            else{
+                showData.value = Resource.Error<Show>(message = "Error")
             }
         }
     }
