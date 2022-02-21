@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ridobiko-movie-app</string>
+    <array name="types">
+        <item>Movies &amp; Series</item>
+        <item>Movies</item>
+        <item>Series</item>
+    </array>
 </resources>
