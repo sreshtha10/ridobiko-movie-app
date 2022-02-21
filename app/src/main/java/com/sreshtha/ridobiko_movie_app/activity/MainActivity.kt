@@ -36,6 +36,8 @@ class MainActivity : AppCompatActivity() {
            tv_btn_search.setOnClickListener {
                if(!_viewModel.hasInternetConnection(applicationContext)){
                    Snackbar.make(root,"No Internet Connection!",Snackbar.LENGTH_SHORT).show()
+                   ivPoster.visibility = View.GONE
+                   slShow.visibility = View.GONE
                    return@setOnClickListener
                }
                if(searchView.query.toString().isEmpty()){
