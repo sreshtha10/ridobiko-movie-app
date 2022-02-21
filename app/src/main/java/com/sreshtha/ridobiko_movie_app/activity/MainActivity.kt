@@ -6,7 +6,9 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.bumptech.glide.Glide
 import com.sreshtha.ridobiko_movie_app.databinding.ActivityMainBinding
+import com.sreshtha.ridobiko_movie_app.model.Show
 import com.sreshtha.ridobiko_movie_app.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
@@ -59,10 +61,15 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Error -> {
                     Log.d("SEARCH_RESULT",it.message.toString())
                     tv_label_nothing_to_show.visibility = View.VISIBLE
+                    iv_poster.visibility = View.GONE
+                    sl_show.visibility = View.GONE
                 }
                 is Resource.Success -> {
                     Log.d("SEARCH_RESULT",it.data.toString())
                     tv_label_nothing_to_show.visibility = View.GONE
+                    iv_poster.visibility = View.VISIBLE
+                    sl_show.visibility = View.VISIBLE
+                    updateUI(it.data!!)
                 }
 
             }
@@ -73,10 +80,15 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Error -> {
                     Log.d("SEARCH_RESULT",it.message.toString())
                     tv_label_nothing_to_show.visibility = View.VISIBLE
+                    iv_poster.visibility = View.GONE
+                    sl_show.visibility = View.GONE
                 }
                 is Resource.Success -> {
                     Log.d("SEARCH_RESULT",it.data.toString())
                     tv_label_nothing_to_show.visibility = View.GONE
+                    iv_poster.visibility = View.VISIBLE
+                    sl_show.visibility = View.VISIBLE
+                    updateUI(it.data!!)
                 }
 
             }
@@ -87,18 +99,43 @@ class MainActivity : AppCompatActivity() {
                 is Resource.Error -> {
                     Log.d("SEARCH_RESULT",it.message.toString())
                     tv_label_nothing_to_show.visibility = View.VISIBLE
+                    iv_poster.visibility = View.GONE
+                    sl_show.visibility = View.GONE
                 }
                 is Resource.Success -> {
                     Log.d("SEARCH_RESULT",it.data.toString())
                     tv_label_nothing_to_show.visibility = View.GONE
+                    iv_poster.visibility = View.VISIBLE
+                    sl_show.visibility = View.VISIBLE
+                    updateUI(it.data!!)
                 }
 
             }
         }
+    }
 
 
+    private fun updateUI(show:Show){
+        binding.apply {
+            Glide.with(root)
+                .load(show.Poster)
+                .into(ivPoster)
 
+            tvTitle.text = show.Title
+            tvGenre.text = show.Genre
+            tvDirector.text = "Directed by ${show.Director}"
+            tvTime.text = show.Runtime
+            tvPlot.text = show.Plot
+            tvCast.text = show.Actors
+            tvYear.text = show.Year
+            tvImdbRating.text = show.imdbRating
 
+            show.Ratings.forEach {
+                if(it.Source.lowercase()=="rotten tomatoes"){
+                    tvRtRating.text = it.Value
+                }
+            }
+        }
 
     }
 }
